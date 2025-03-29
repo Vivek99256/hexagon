@@ -1,3 +1,4 @@
+'use client';
 import JobIndustriesGrid from "@/job-industries-grid"
 
 export default function Home() {

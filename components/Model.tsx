@@ -1,3 +1,4 @@
+'use client';
 import styles from '../styles/job-industries-grid.module.css';// Assuming CSS module is in the same directory or adjust the path
 
 const SkillManagement = () => {
