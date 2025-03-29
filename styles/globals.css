@@ -1,0 +1,21 @@
+.hexagon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 100px;
+  background: linear-gradient(to bottom, #4a90e2, #1e63b6);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  color: white;
+  text-align: center;
+  font-weight: bold;
+  transition: transform 0.2s ease-in-out;
+}
+
+.hexagon:hover {
+  transform: scale(1.1);
+}
+
+.hexagon-inner {
+  padding: 10px;
+}
