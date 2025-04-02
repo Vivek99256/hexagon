@@ -99,8 +99,8 @@ export default function JobIndustriesGrid() {
                 className="hexagon-wrapper cursor-pointer"
                 onClick={() => {
                   
-                  if (industry.department) {
-                    router.push(`/industry/${industry.departyment}`);
+                  if (industry.sector) {
+                    router.push(`/industry/${industry.sector}`);
                   } else {
                     console.error("Invalid sector:", industries);
                   }
