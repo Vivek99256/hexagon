@@ -9,7 +9,7 @@ export default function App() {
     <Router>
       <Routes>
         {/* Main page for industries, sectors, and sub-sectors */}
-        <Route path="/main" element={<JobIndustryTree />} />
+        <Route path="/" element={<JobIndustryTree />} />
 
         {/* Job roles page */}
         <Route path="/job-roles" element={<EmployeeSkillManagement />} />
