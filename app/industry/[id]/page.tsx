@@ -1,22 +1,19 @@
 "use client";
 import React from "react";
-import Link from "next/link";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import JobIndustryTree from "./JobIndustryTree";
 import EmployeeSkillManagement from "@/EmployeeSkillManagement";
 
 export default function App() {
   return (
-    <div>
-      {/* Main page for industries, sectors, and sub-sectors */}
-      <JobIndustryTree />
+    <Router>
+      <Routes>
+        {/* Main page for industries, sectors, and sub-sectors */}
+        <Route path="/" element={<JobIndustryTree />} />
 
-      {/* Links for navigation */}
-      <nav>
-        <Link href="/job-roles">Job Roles</Link>
-      </nav>
-
-      {/* Job roles page */}
-      <EmployeeSkillManagement />
-    </div>
+        {/* Job roles page */}
+        <Route path="/job-roles" element={<EmployeeSkillManagement />} />
+      </Routes>
+    </Router>
   );
 }
