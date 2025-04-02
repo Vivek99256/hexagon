@@ -490,7 +490,7 @@ export default function JobIndustryTree() {
     </div>
   
   <div>
-  <div className="text-xl text-neutral-700 mb-5">
+  <div className="mt-5 text-xl text-neutral-700 mb-5">
     Tasks & Skills for {selectedJobRole}
   </div>
 
