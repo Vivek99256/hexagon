@@ -22,9 +22,9 @@ export default function JobIndustryTree() {
   const [error, setError] = useState<string | null>(null);
   const [tasks, setTasks] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
-  const [activeTab, setActiveTab] = useState("Industry"); // Always set to "Industry"
+  const activeTab = "Industry"; // Always set to "Industry"
 
-  const navigate = useNavigate();
+  // Removed unused navigate
 
   // Fetch data from the API
   useEffect(() => {
@@ -77,9 +77,7 @@ export default function JobIndustryTree() {
   };
 
   // Handle back to Task/Skill selection
-  const handleBackToTaskSkill = () => {
-    setView(null); // Reset the view
-  };
+  // Removed unused handleBackToTaskSkill
 
   // Handle back to sub-sectors
   const handleBackToSubSectors = () => {
