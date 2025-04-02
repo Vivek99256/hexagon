@@ -1,6 +1,8 @@
 'use client';
-import EmployeeSkillManagement from "@/EmployeeSkillManagement";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import JobIndustryTree from "../industry/[id]/JobIndustryTree";
 
 export default function EmployeeSkillPage() {
-    return <EmployeeSkillManagement />;
+    return <JobIndustryTree />;
 }
