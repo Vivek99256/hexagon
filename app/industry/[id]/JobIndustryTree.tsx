@@ -17,12 +17,16 @@ export default function JobIndustryTree() {
   const [selectedSector, setSelectedSector] = useState<string | null>(null);
   const [selectedSubSector, setSelectedSubSector] = useState<string | null>(null);
   const [selectedJobRole, setSelectedJobRole] = useState<string | null>(null);
-  const [view, setView] = useState<"task" | "skill" | null>(null);
+  const [view, setView] = useState<"task" | "skill" | "jobdescription" | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tasks, setTasks] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
+  const [jobroletasks, setJobroleTasks] = useState<string[]>([]);
+  const [jobroleskills, setJobroleSkills] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState("Industry"); // Always set to "Industry"
+  const [jobDescription, setJobDescription] = useState<string | null>(null);
+
 
   const navigate = useNavigate();
 
@@ -158,6 +162,50 @@ export default function JobIndustryTree() {
     
     }
   };
+
+  const handleJobDescriptionClick = async (jobrole: string | null | undefined) => {
+    if (jobrole) {
+      setSelectedJobRole(jobrole);
+      setView("jobdescription");
+  
+      try {
+        const baseUrl = "https://erp.triz.co.in/lms_data";
+        
+        // Fetch Tasks
+        const taskParams = new URLSearchParams({
+          table: "s_jobrole_task",
+          "filters[jobrole]": jobrole,
+        });
+        const taskResponse = await fetch(`${baseUrl}?${taskParams.toString()}`);
+        const taskData = await taskResponse.json();
+  
+        // Fetch Skills
+        const skillParams = new URLSearchParams({
+          table: "s_jobrole_skills",
+          "filters[jobrole]": jobrole,
+        });
+        const skillResponse = await fetch(`${baseUrl}?${skillParams.toString()}`);
+        const skillData = await skillResponse.json();
+
+        // Fetch Job Description
+        const jobDescriptionParams = new URLSearchParams({
+          table: "s_jobrole",
+          "filters[jobrole]": jobrole,
+        });
+        const jobDescriptionResponse = await fetch(`${baseUrl}?${jobDescriptionParams.toString()}`);
+        const jobDescriptionData = await jobDescriptionResponse.json();
+
+        // Store tasks, skills, and job description
+        setJobroleTasks(taskData);
+        setJobroleSkills(skillData);
+        setJobDescription(jobDescriptionData[0]?.description || "No description available.");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
+      }
+    }
+  };
+  
+  
 
   if (loading) {
     return <div>Loading...</div>;
@@ -364,6 +412,14 @@ export default function JobIndustryTree() {
                 >
                   Skill
                 </button>
+                <button
+      onClick={() => handleJobDescriptionClick(selectedJobRole)}
+      className={`px-4 py-2 rounded hover:bg-blue-600 ${
+        view === "jobdescription" ? "bg-blue-700 text-white" : "bg-blue-500 text-white"
+      }`}
+    >
+      Job Description
+    </button>
               </div>
               <button
                 onClick={handleBackToJobRoles}
@@ -380,16 +436,22 @@ export default function JobIndustryTree() {
               <div className="text-xl text-neutral-700 mb-5">
                 Task details for {selectedJobRole}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {tasks.map((task, index) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {tasks.length > 0 ? (
+                  tasks.map((task, index) => (
                   <div
-                    key={index}
-                    className="p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md text-center break-words"
+                  key={index}
+                  className="p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md text-center break-words"
                   >
-                    {task}
+                  {task}
                   </div>
-                ))}
-              </div>
+                  ))
+                ) : (
+                  <div className="text-center col-span-full text-gray-500">
+                  No tasks available.
+                  </div>
+                )}
+                </div>
             </div>
           )}
 
@@ -399,18 +461,71 @@ export default function JobIndustryTree() {
               <div className="text-xl text-neutral-700 mb-5">
                 Skill details for {selectedJobRole}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {skills.map((skill, index) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {skills.length > 0 ? (
+                skills.map((skill, index) => (
                   <div
-                    key={index}
-                    className="p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md text-center break-words"
+                  key={index}
+                  className="p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md text-center break-words"
                   >
-                    {skill}
+                  {skill}
                   </div>
-                ))}
-              </div>
+                ))
+                ) : (
+                <div className="text-center col-span-full text-gray-500">
+                  No skills available.
+                </div>
+                )}
+                </div>
             </div>
           )}
+
+{view === "jobdescription" && (
+  <div>
+    <div className="text-xl text-neutral-700 mb-5">
+      Job Description for {selectedJobRole}
+    </div>
+    <div className="p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md text-center break-words">
+      {jobDescription}
+    </div>
+  
+  <div>
+  <div className="text-xl text-neutral-700 mb-5">
+    Tasks & Skills for {selectedJobRole}
+  </div>
+
+  {/* Tasks Section */}
+<div className="p-4 bg-red-100 text-red-900 rounded-lg shadow-md mb-4">
+  <h2 className="text-lg font-bold mb-2">📝 Tasks</h2>
+  {tasks.length > 0 ? (
+    <ul className="list-disc pl-4">
+      {jobroletasks.map((task, index) => (
+        <li key={index} className="mb-2">{task.task}</li>  
+      ))}
+      
+    </ul>
+  ) : (
+    <p>No tasks available.</p>
+  )}
+</div>
+
+{/* Skills Section */}
+<div className="p-4 bg-blue-100 text-blue-900 rounded-lg shadow-md">
+  <h2 className="text-lg font-bold mb-2">🛠️ Required Skills</h2>
+  {skills.length > 0 ? (
+    <ul className="list-disc pl-4">
+      {jobroleskills.map((skill, index) => (
+        <li key={index} className="mb-2">{skill.skill}</li>  
+      ))}
+    </ul>
+  ) : (
+    <p>No skills available.</p>
+  )}
+</div>
+</div>
+</div>
+)}
+
         </div>
       </div>
     </div>

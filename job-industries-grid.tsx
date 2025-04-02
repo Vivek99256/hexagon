@@ -28,7 +28,7 @@ export default function JobIndustriesGrid() {
   useEffect(() => {
     const fetchIndustries = async () => {
       try {
-        const response = await fetch("https://erp.triz.co.in/lms_data?table=s_jobrole");
+        const response = await fetch("https://erp.triz.co.in/lms_data?table=s_industries");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -100,9 +100,9 @@ export default function JobIndustriesGrid() {
                 onClick={() => {
                   
                   if (industry.sector) {
-                    router.push(`/industry/${industry.sector}`);
+                    router.push(`/industry/${industry.department}`);
                   } else {
-                    console.error("Invalid sector:", industry);
+                    console.error("Invalid sector:", industries);
                   }
                 }}
                 >
