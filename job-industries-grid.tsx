@@ -15,7 +15,7 @@ type Industry = {
   id: number; // Ensure `id` is unique
   industries: string;
   title: string;
-  sector: string;
+  department: string;
 };
 
 export default function JobIndustriesGrid() {
@@ -98,11 +98,10 @@ export default function JobIndustriesGrid() {
                 key={industry.id || `${industry.industries}-${index}`} // Ensure a unique key
                 className="hexagon-wrapper cursor-pointer"
                 onClick={() => {
-                  
-                  if (industry.sector) {
-                    router.push(`/industry/${industry.sector}`);
+                  if (industry.department) {
+                  router.push(`/industry/${encodeURIComponent(industry.department)}`);
                   } else {
-                    console.error("Invalid sector:", industries);
+                  console.error("Invalid department:", industry);
                   }
                 }}
                 >

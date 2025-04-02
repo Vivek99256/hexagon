@@ -2,7 +2,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import JobIndustryTree from "./JobIndustryTree";
-import EmployeeSkillManagement from "@/EmployeeSkillManagement";
 
 export default function App() {
   return (
@@ -12,7 +11,7 @@ export default function App() {
         <Route path="/" element={<JobIndustryTree />} />
 
         {/* Job roles page */}
-        <Route path="/job-roles" element={<EmployeeSkillManagement />} />
+        <Route path="/job-roles" element={<JobIndustryTree />} />
       </Routes>
     </Router>
   );
