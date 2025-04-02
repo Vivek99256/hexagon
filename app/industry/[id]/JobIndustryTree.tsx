@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 
 export interface Industry {
   industries: string | null; // Industry name
@@ -28,7 +28,7 @@ export default function JobIndustryTree() {
   const [jobDescription, setJobDescription] = useState<string | null>(null);
 
 
-  const navigate = useNavigate();
+  const navigate = useRouter();
 
   // Fetch data from the API
   useEffect(() => {
