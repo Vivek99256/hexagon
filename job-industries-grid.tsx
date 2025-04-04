@@ -99,7 +99,7 @@ export default function JobIndustriesGrid() {
                 className="hexagon-wrapper cursor-pointer"
                 onClick={() => {
                   if (industry.department) {
-                  router.push(`/industry/${encodeURIComponent(industry.department)}`);
+                  router.push(`/industry/${encodeURIComponent(industry.industries)}`);
                   } else {
                   console.error("Invalid department:", industry);
                   }

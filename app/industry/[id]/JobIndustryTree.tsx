@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter,usePathname  } from "next/navigation";
 
 export interface Industry {
   industries: string | null; // Industry name
@@ -29,6 +29,7 @@ export default function JobIndustryTree() {
 
 
   const navigate = useRouter();
+  const searchParams = usePathname();
 
   // Fetch data from the API
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function JobIndustryTree() {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
+        
         const data: Industry[] = await response.json();
         setIndustries(data);
         setLoading(false);
@@ -225,10 +227,31 @@ export default function JobIndustryTree() {
   );
 
   // Filter sectors for the selected industry
-  const filteredSectors = industries
-    .filter((industry) => industry.industries === selectedIndustry)
-    .map((industry) => industry.sector ?? null)
-    .filter((sector, index, self) => sector && self.indexOf(sector) === index);
+  // const filteredSectors = industries
+  //   .filter((industry) => industry.industries === selectedIndustry)
+  //   .map((industry) => industry.sector ?? null)
+  //   .filter((sector, index, self) => sector && self.indexOf(sector) === index);
+
+  // Assuming industries is your array of Industry objects
+// and selectedIndustry is a state or prop you may have
+// and searchParams is a string like "/industry/Services"
+
+// added on 04-04-2025 by uma for onload search department
+const explodeRoute = searchParams ? searchParams.split("/") : [];
+const industrval = explodeRoute[2] || null; // safely extract route segment
+const decodedIndustry = industrval ? decodeURIComponent(industrval) : null; // decode route
+// Determine which value to use for filtering
+const industryToFilter = selectedIndustry || decodedIndustry;
+if(selectedIndustry===null){
+  setSelectedIndustry(decodedIndustry);
+}
+// added on 04-04-2025 by uma for onload search department end
+
+// Now filter the sectors accordingly
+const filteredSectors = industries
+  .filter((industry) => industry.industries === industryToFilter)
+  .map((industry) => industry.sector ?? null)
+  .filter((sector, index, self) => sector && self.indexOf(sector) === index);
 
   // Filter sub-sectors for the selected sector
   const filteredSubSectors = industries
@@ -282,6 +305,7 @@ export default function JobIndustryTree() {
               {/* Vertical Line */}
               <div className="absolute left-2.5 top-0 h-full w-1 bg-blue-300"></div>
               {uniqueIndustries.map((industry, index) => (
+                  industry ? (
                 <div key={index} className="flex items-center mb-3 relative">
                   {/* Larger Dot */}
                   <div className="w-6 h-6 bg-gray-300 rounded-full flex-shrink-0"></div>
@@ -303,6 +327,7 @@ export default function JobIndustryTree() {
                     {industry}
                     </div>
                 </div>
+                  ) : null
               ))}
             </div>
           </div>
